@@ -138,7 +138,7 @@ export function BattleScreen() {
           {b.phase === 'wrong_feedback' ? (
             <div className="flex flex-col items-center gap-4 animate-slideUp">
               {b.answerMode === 'typed' ? (
-                <div className="text-green-400 font-black text-3xl animate-correctFlash rounded-xl px-6 py-2">
+                <div className="bg-white text-emerald-600 font-black text-4xl animate-correctFlash rounded-2xl px-8 py-3 border-4 border-emerald-400 shadow-lg">
                   {b.currentProblem.answer}
                 </div>
               ) : (

@@ -68,7 +68,7 @@ export function TypedAnswer({ onAnswer, disabled, lastAnswerCorrect, correctAnsw
           {input || '?'}
         </div>
         {lastAnswerCorrect === false && disabled && (
-          <div className="text-green-400 font-black text-2xl mt-2 animate-correctFlash rounded-xl px-4 py-1">
+          <div className="bg-white text-emerald-600 font-black text-3xl mt-2 animate-correctFlash rounded-2xl px-6 py-2 border-4 border-emerald-400 shadow-lg">
             {correctAnswer}
           </div>
         )}

@@ -1,7 +1,14 @@
 export type Operation = 'multiply' | 'divide';
 export type DisplayFormat = 'standard' | 'missing_first' | 'missing_second';
 export type Difficulty = 1 | 2 | 3 | 4;
+export type AnswerMode = 'multiple_choice' | 'typed';
 export type Screen = 'home' | 'battle' | 'results';
+
+export interface GameSettings {
+  selectedTables: number[];
+  difficulty: Difficulty;
+  answerMode: AnswerMode;
+}
 
 export interface Problem {
   operandA: number;
@@ -54,7 +61,8 @@ export interface BattleState {
   correctCount: number;
   wrongCount: number;
   bossHitsLanded: number;
-  phase: 'answering' | 'correct_feedback' | 'wrong_feedback' | 'monster_defeated' | 'boss_intro' | 'victory' | 'game_over';
+  phase: 'answering' | 'player_attacking' | 'monster_attacking' | 'correct_feedback' | 'wrong_feedback' | 'monster_defeated' | 'boss_intro' | 'victory' | 'game_over';
+  answerMode: AnswerMode;
   lastAnswerCorrect: boolean | null;
 }
 

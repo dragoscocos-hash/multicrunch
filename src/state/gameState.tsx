@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer, type ReactNode } from 'react';
-import type { Screen, BattleState, DungeonResult, PlayerProgress, Dungeon } from '../types';
+import type { Screen, BattleState, DungeonResult, PlayerProgress, Dungeon, GameSettings, Difficulty, AnswerMode } from '../types';
 import { generateMonsterList } from '../game/monsters';
 import { generateProblem, generateChoices } from '../game/problemGenerator';
 
@@ -8,6 +8,7 @@ interface AppState {
   battle: BattleState | null;
   lastResult: DungeonResult | null;
   player: PlayerProgress;
+  settings: GameSettings;
 }
 
 type Action =
@@ -15,7 +16,8 @@ type Action =
   | { type: 'ANSWER'; choiceValue: number }
   | { type: 'ADVANCE_AFTER_FEEDBACK' }
   | { type: 'GO_HOME' }
-  | { type: 'RETRY' };
+  | { type: 'RETRY' }
+  | { type: 'UPDATE_SETTINGS'; settings: Partial<GameSettings> };
 
 function calcStars(correct: number, wrong: number, heartsRemaining: number): number {
   const total = correct + wrong;
@@ -46,23 +48,55 @@ function savePlayer(player: PlayerProgress) {
   localStorage.setItem('multicrunch_player', JSON.stringify(player));
 }
 
+const DEFAULT_SETTINGS: GameSettings = {
+  selectedTables: [2, 5, 10],
+  difficulty: 1 as Difficulty,
+  answerMode: 'multiple_choice' as AnswerMode,
+};
+
+function loadSettings(): GameSettings {
+  try {
+    const saved = localStorage.getItem('multicrunch_settings');
+    if (saved) return { ...DEFAULT_SETTINGS, ...JSON.parse(saved) };
+  } catch { /* ignore */ }
+  return { ...DEFAULT_SETTINGS };
+}
+
+function saveSettings(settings: GameSettings) {
+  localStorage.setItem('multicrunch_settings', JSON.stringify(settings));
+}
+
+const DIFFICULTY_CONFIG: Record<number, { monsterCount: number; hearts: number }> = {
+  1: { monsterCount: 5, hearts: 4 },
+  2: { monsterCount: 7, hearts: 3 },
+  3: { monsterCount: 9, hearts: 3 },
+  4: { monsterCount: 12, hearts: 2 },
+};
+
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
     case 'START_DUNGEON': {
-      const monsters = generateMonsterList(action.dungeon);
-      const problem = generateProblem(action.dungeon);
-      const choices = generateChoices(problem, action.dungeon);
+      const diffConfig = DIFFICULTY_CONFIG[state.settings.difficulty] ?? DIFFICULTY_CONFIG[1];
+      const dungeonClone: Dungeon = {
+        ...action.dungeon,
+        operands: state.settings.selectedTables,
+        monsterCount: diffConfig.monsterCount,
+      };
+      const monsters = generateMonsterList(dungeonClone);
+      const problem = generateProblem(dungeonClone);
+      const choices = generateChoices(problem, dungeonClone);
       const battle: BattleState = {
-        dungeon: action.dungeon,
+        dungeon: dungeonClone,
         monsters,
         currentMonsterIndex: 0,
         currentProblem: problem,
         choices,
-        playerHearts: 3,
+        playerHearts: diffConfig.hearts,
         correctCount: 0,
         wrongCount: 0,
         bossHitsLanded: 0,
         phase: monsters[0].isBoss ? 'boss_intro' : 'answering',
+        answerMode: state.settings.answerMode,
         lastAnswerCorrect: null,
       };
       return { ...state, screen: 'battle', battle };
@@ -76,7 +110,6 @@ function reducer(state: AppState, action: Action): AppState {
 
       if (isCorrect) {
         const newBossHits = monster.isBoss ? b.bossHitsLanded + 1 : b.bossHitsLanded;
-        const monsterDefeated = !monster.isBoss || newBossHits >= monster.maxHP;
         return {
           ...state,
           battle: {
@@ -84,7 +117,7 @@ function reducer(state: AppState, action: Action): AppState {
             correctCount: b.correctCount + 1,
             bossHitsLanded: newBossHits,
             lastAnswerCorrect: true,
-            phase: monsterDefeated ? 'monster_defeated' : 'correct_feedback',
+            phase: 'player_attacking',
           },
         };
       } else {
@@ -96,7 +129,7 @@ function reducer(state: AppState, action: Action): AppState {
             wrongCount: b.wrongCount + 1,
             playerHearts: newHearts,
             lastAnswerCorrect: false,
-            phase: newHearts <= 0 ? 'game_over' : 'wrong_feedback',
+            phase: 'monster_attacking',
           },
         };
       }
@@ -105,6 +138,28 @@ function reducer(state: AppState, action: Action): AppState {
     case 'ADVANCE_AFTER_FEEDBACK': {
       if (!state.battle) return state;
       const b = state.battle;
+
+      if (b.phase === 'player_attacking') {
+        const monster = b.monsters[b.currentMonsterIndex];
+        const monsterDefeated = !monster.isBoss || b.bossHitsLanded >= monster.maxHP;
+        return {
+          ...state,
+          battle: {
+            ...b,
+            phase: monsterDefeated ? 'monster_defeated' : 'correct_feedback',
+          },
+        };
+      }
+
+      if (b.phase === 'monster_attacking') {
+        return {
+          ...state,
+          battle: {
+            ...b,
+            phase: b.playerHearts <= 0 ? 'game_over' : 'wrong_feedback',
+          },
+        };
+      }
 
       if (b.phase === 'wrong_feedback' || b.phase === 'correct_feedback') {
         const problem = generateProblem(b.dungeon);
@@ -193,6 +248,7 @@ function reducer(state: AppState, action: Action): AppState {
     case 'RETRY': {
       if (!state.battle) return { ...state, screen: 'home' };
       const dungeon = state.battle.dungeon;
+      const diffConfig = DIFFICULTY_CONFIG[state.settings.difficulty] ?? DIFFICULTY_CONFIG[1];
       const monsters = generateMonsterList(dungeon);
       const problem = generateProblem(dungeon);
       return {
@@ -204,14 +260,21 @@ function reducer(state: AppState, action: Action): AppState {
           currentMonsterIndex: 0,
           currentProblem: problem,
           choices: generateChoices(problem, dungeon),
-          playerHearts: 3,
+          playerHearts: diffConfig.hearts,
           correctCount: 0,
           wrongCount: 0,
           bossHitsLanded: 0,
           phase: 'answering',
+          answerMode: state.settings.answerMode,
           lastAnswerCorrect: null,
         },
       };
+    }
+
+    case 'UPDATE_SETTINGS': {
+      const newSettings = { ...state.settings, ...action.settings };
+      saveSettings(newSettings);
+      return { ...state, settings: newSettings };
     }
 
     default:
@@ -223,11 +286,13 @@ const GameContext = createContext<{ state: AppState; dispatch: React.Dispatch<Ac
 
 export function GameProvider({ children }: { children: ReactNode }) {
   const player = loadPlayer();
+  const settings = loadSettings();
   const [state, dispatch] = useReducer(reducer, {
     screen: 'home',
     battle: null,
     lastResult: null,
     player,
+    settings,
   });
   return <GameContext.Provider value={{ state, dispatch }}>{children}</GameContext.Provider>;
 }

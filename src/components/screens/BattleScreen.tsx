@@ -58,11 +58,11 @@ export function BattleScreen() {
   if (b.phase === 'boss_intro') {
     return (
       <div className={`min-h-screen bg-gradient-to-b ${b.dungeon.theme.bg} flex flex-col items-center justify-center gap-8 p-6 relative overflow-hidden`}>
-        <Decorations scene="battle" />
+        <Decorations scene="battle" dungeonId={b.dungeon.id} />
         <div className="text-red-400 text-2xl font-black tracking-widest animate-pulse">{'\u26A0'} WARNING {'\u26A0'}</div>
         <div className="text-8xl animate-float">{monster.emoji}</div>
         <div className="text-center">
-          <div className="text-white text-3xl font-black">{monster.name}</div>
+          <div className="text-white text-3xl font-black font-game">{monster.name}</div>
           <div className="text-red-300 text-lg mt-2">BOSS — {monster.maxHP} HP</div>
         </div>
         <div className="text-white/60 text-base">Answer {monster.maxHP} questions to defeat!</div>
@@ -77,7 +77,7 @@ export function BattleScreen() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black flex flex-col items-center justify-center gap-6 p-6">
         <div className="text-7xl">{'\u{1F480}'}</div>
-        <div className="text-white text-3xl font-black">Game Over!</div>
+        <div className="text-white text-3xl font-black font-game">Game Over!</div>
         <div className="text-white/60 text-center">
           <div>Correct: {b.correctCount} | Wrong: {b.wrongCount}</div>
           <div>Accuracy: {acc}%</div>
@@ -96,20 +96,21 @@ export function BattleScreen() {
 
   return (
     <div className={`min-h-screen bg-gradient-to-b ${b.dungeon.theme.bg} flex flex-col p-4 gap-4 relative overflow-hidden ${b.phase === 'monster_attacking' ? 'animate-screenShake' : ''}`}>
-      <Decorations scene="battle" />
+      <Decorations scene="battle" dungeonId={b.dungeon.id} />
+      <div className="absolute inset-0 bg-grid pointer-events-none" />
       <BattleEffects phase={b.phase} monsterEmoji={monster.emoji} />
       <div className="flex items-center justify-between pt-2">
         <div>
-          <div className={`font-bold text-sm ${b.dungeon.theme.accent}`}>{b.dungeon.theme.icon} {b.dungeon.name}</div>
+          <div className={`font-game font-bold text-sm ${b.dungeon.theme.accent} bg-black/40 rounded-full px-3 py-1`}>{b.dungeon.theme.icon} {b.dungeon.name}</div>
           <div className="text-white/50 text-xs">Monster {progress}/{totalMonsters}</div>
         </div>
         <HeartsBar hearts={b.playerHearts} isPulsing={b.phase === 'monster_attacking'} />
       </div>
 
-      <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+      <div className="w-full h-2.5 bg-white/10 rounded-full overflow-hidden">
         <div
-          className="h-full bg-yellow-400 rounded-full transition-all duration-500"
-          style={{ width: `${(b.currentMonsterIndex / b.monsters.length) * 100}%` }}
+          className="h-full rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(250,204,21,0.4)]"
+          style={{ width: `${(b.currentMonsterIndex / b.monsters.length) * 100}%`, background: 'linear-gradient(90deg, #facc15, #f97316)' }}
         />
       </div>
 

@@ -43,15 +43,15 @@ export function TypedAnswer({ onAnswer, disabled, lastAnswerCorrect, correctAnsw
   }
 
   function getKeyStyle(key: typeof KEYS[number]): string {
-    const base = 'min-h-14 text-2xl font-bold rounded-2xl transition-all duration-150 active:scale-95 touch-manipulation border select-none';
+    const base = 'min-h-[56px] text-2xl font-bold rounded-xl transition-all duration-150 active:scale-[0.92] active:shadow-none touch-manipulation border-2 select-none font-game';
 
     if (key === 'submit') {
-      return `${base} bg-gradient-to-b from-green-500/50 to-emerald-500/50 border-green-400/40 text-white`;
+      return `${base} bg-gradient-to-b from-emerald-500 to-emerald-700 border-t-emerald-300 border-b-emerald-900 border-l-emerald-500 border-r-emerald-600 text-white shadow-md active:border-t-emerald-600`;
     }
     if (key === 'backspace') {
-      return `${base} bg-gradient-to-b from-orange-500/30 to-amber-500/30 border-orange-400/30 text-white`;
+      return `${base} bg-gradient-to-b from-orange-500 to-orange-700 border-t-orange-300 border-b-orange-900 border-l-orange-500 border-r-orange-600 text-white shadow-md active:border-t-orange-600`;
     }
-    return `${base} bg-gradient-to-b from-sky-500/30 to-indigo-500/30 border-indigo-300/30 text-white`;
+    return `${base} bg-gradient-to-b from-slate-600 to-slate-800 border-t-slate-400 border-b-slate-900 border-l-slate-600 border-r-slate-700 text-white shadow-md active:border-t-slate-600`;
   }
 
   function getKeyLabel(key: typeof KEYS[number]): string {
@@ -63,8 +63,8 @@ export function TypedAnswer({ onAnswer, disabled, lastAnswerCorrect, correctAnsw
   return (
     <div className="flex flex-col gap-3 w-full">
       {/* Display area */}
-      <div className="flex flex-col items-center justify-center min-h-[4rem] bg-black/30 rounded-2xl border border-white/10 py-3">
-        <div className="text-5xl font-black text-white tracking-widest">
+      <div className={`flex flex-col items-center justify-center min-h-[4rem] bg-black/30 rounded-2xl border py-3 ${input ? 'shadow-[0_0_15px_rgba(250,204,21,0.3)] border-yellow-500/30' : 'border-white/10'}`}>
+        <div className="text-5xl font-black text-white tracking-widest font-game">
           {input || '?'}
         </div>
         {lastAnswerCorrect === false && disabled && (

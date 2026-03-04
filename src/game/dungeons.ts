@@ -10,8 +10,8 @@ export const DUNGEONS: Dungeon[] = [
     monsterCount: 7,
     difficulty: 1,
     theme: {
-      bg: 'from-emerald-400 via-green-300 to-teal-400',
-      accent: 'text-emerald-800',
+      bg: 'from-emerald-950 via-green-900 to-teal-950',
+      accent: 'text-emerald-300',
       icon: '\u{1F33F}',
     },
     unlockCondition: null,
@@ -25,8 +25,8 @@ export const DUNGEONS: Dungeon[] = [
     monsterCount: 7,
     difficulty: 1,
     theme: {
-      bg: 'from-sky-400 via-blue-300 to-cyan-400',
-      accent: 'text-blue-800',
+      bg: 'from-blue-950 via-sky-900 to-cyan-950',
+      accent: 'text-sky-300',
       icon: '\u{1F3F0}',
     },
     unlockCondition: { dungeonId: 'doubles-den', minStars: 1 },
@@ -40,8 +40,8 @@ export const DUNGEONS: Dungeon[] = [
     monsterCount: 8,
     difficulty: 2,
     theme: {
-      bg: 'from-lime-400 via-green-300 to-emerald-400',
-      accent: 'text-lime-800',
+      bg: 'from-green-950 via-lime-900 to-emerald-950',
+      accent: 'text-lime-300',
       icon: '\u{1F332}',
     },
     unlockCondition: { dungeonId: 'tower-of-tens', minStars: 1 },
@@ -55,8 +55,8 @@ export const DUNGEONS: Dungeon[] = [
     monsterCount: 8,
     difficulty: 2,
     theme: {
-      bg: 'from-violet-400 via-purple-300 to-fuchsia-400',
-      accent: 'text-purple-800',
+      bg: 'from-violet-950 via-purple-900 to-fuchsia-950',
+      accent: 'text-purple-300',
       icon: '\u{1F48E}',
     },
     unlockCondition: { dungeonId: 'fives-forest', minStars: 1 },

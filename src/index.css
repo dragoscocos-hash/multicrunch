@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,14 +7,16 @@
 * { box-sizing: border-box; }
 body {
   margin: 0;
-  background: linear-gradient(135deg, #e0f2fe, #f0e6ff, #fce7f3);
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #0f0a1e;
+  font-family: 'Nunito', sans-serif;
   overflow: hidden;
 }
 
+/* === IDLE / UI ANIMATIONS === */
+
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  50% { transform: translateY(-15px); }
 }
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
@@ -33,10 +37,12 @@ body {
   100% { transform: translateY(0); opacity: 1; }
 }
 
-.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-float { animation: float 4s ease-in-out infinite; }
 .animate-shake { animation: shake 0.5s ease-in-out; }
 .animate-popIn { animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
 .animate-slideUp { animation: slideUp 0.3s ease-out; }
+
+/* === COMBAT ANIMATIONS === */
 
 @keyframes swordFly {
   0% { transform: translateY(0) scale(1); opacity: 1; }
@@ -84,6 +90,18 @@ body {
   50% { transform: scale(1.3); filter: brightness(1.5) hue-rotate(-20deg); }
 }
 
+.animate-swordFly { animation: swordFly 0.5s ease-out forwards; }
+.animate-impactFlash { animation: impactFlash 0.35s ease-out forwards; }
+.animate-slashMark { animation: slashMark 0.4s ease-out forwards; }
+.animate-monsterLunge { animation: monsterLunge 0.3s ease-out; }
+.animate-damageProjectile { animation: damageProjectile 0.5s ease-in forwards; }
+.animate-redVignette { animation: redVignette 0.5s ease-out; }
+.animate-screenShake { animation: screenShake 0.4s ease-out; }
+.animate-damageNumber { animation: damageNumber 0.6s ease-out forwards; }
+.animate-heartPulse { animation: heartPulse 0.4s ease-out; }
+
+/* === DECORATIVE ANIMATIONS === */
+
 @keyframes drift {
   0% { transform: translateX(0) translateY(0); }
   25% { transform: translateX(15px) translateY(-8px); }
@@ -111,6 +129,8 @@ body {
 .animate-sway { animation: sway 4s ease-in-out infinite; }
 .animate-sparkle { animation: sparkle 2s ease-in-out infinite; }
 
+/* === ANSWER FEEDBACK === */
+
 @keyframes correctFlash {
   0%, 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); transform: scale(1); }
   25% { box-shadow: 0 0 20px 8px rgba(74, 222, 128, 0.7); transform: scale(1.08); }
@@ -119,12 +139,133 @@ body {
 }
 .animate-correctFlash { animation: correctFlash 1.2s ease-in-out infinite; }
 
-.animate-swordFly { animation: swordFly 0.5s ease-out forwards; }
-.animate-impactFlash { animation: impactFlash 0.35s ease-out forwards; }
-.animate-slashMark { animation: slashMark 0.4s ease-out forwards; }
-.animate-monsterLunge { animation: monsterLunge 0.3s ease-out; }
-.animate-damageProjectile { animation: damageProjectile 0.5s ease-in forwards; }
-.animate-redVignette { animation: redVignette 0.5s ease-out; }
-.animate-screenShake { animation: screenShake 0.4s ease-out; }
-.animate-damageNumber { animation: damageNumber 0.6s ease-out forwards; }
-.animate-heartPulse { animation: heartPulse 0.4s ease-out; }
+/* === NEW: CAMERA SHAKE (wrong answer on battle container) === */
+
+@keyframes cameraShake {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  20% { transform: translateX(-5px) rotate(-0.5deg); }
+  40% { transform: translateX(5px) rotate(0.5deg); }
+  60% { transform: translateX(-3px) rotate(-0.3deg); }
+  80% { transform: translateX(3px) rotate(0.3deg); }
+}
+.animate-cameraShake { animation: cameraShake 0.4s ease-out; }
+
+/* === NEW: HEART CRACK ON LOSS === */
+
+@keyframes heartCrack {
+  0% { transform: scale(1); filter: brightness(1); }
+  30% { transform: scale(1.3); filter: brightness(2); }
+  60% { transform: scale(0.7); filter: brightness(0.5) grayscale(1); }
+  100% { transform: scale(1); filter: grayscale(1) opacity(0.3); }
+}
+.animate-heartCrack { animation: heartCrack 0.6s ease-out forwards; }
+
+/* === NEW: STAR POP IN (results screen) === */
+
+@keyframes starPop {
+  0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+  60% { transform: scale(1.3) rotate(5deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+.animate-starPop { animation: starPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+/* === NEW: XP GLOW === */
+
+@keyframes xpGlow {
+  0%, 100% { text-shadow: 0 0 10px rgba(250,204,21,0.5); }
+  50% { text-shadow: 0 0 20px rgba(250,204,21,1), 0 0 40px rgba(250,204,21,0.5); }
+}
+.animate-xpGlow { animation: xpGlow 1.5s ease-in-out infinite; }
+
+/* === NEW: CORRECT ANSWER BURST === */
+
+@keyframes correctBurst {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(74,222,128,0.7); }
+  50% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(74,222,128,0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(74,222,128,0); }
+}
+.animate-correctBurst { animation: correctBurst 0.4s ease-out; }
+
+/* === NEW: MONSTER HIT RED FLASH === */
+
+@keyframes hitFlash {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(2) saturate(0) sepia(1) hue-rotate(0deg); }
+}
+.animate-hitFlash { animation: hitFlash 0.3s ease-out; }
+
+/* === NEW: FLOATING SPARKLE ELEMENTS === */
+
+@keyframes sparkleFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+  33% { transform: translateY(-15px) rotate(10deg); opacity: 1; }
+  66% { transform: translateY(-8px) rotate(-5deg); opacity: 0.8; }
+}
+.animate-sparkleFloat { animation: sparkleFloat 4s ease-in-out infinite; }
+
+/* === NEW: CONFETTI FALL === */
+
+@keyframes confettiFall {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(120vh) rotate(720deg); opacity: 0; }
+}
+.animate-confettiFall { animation: confettiFall 3s ease-in forwards; }
+
+/* === NEW: SHIMMER EFFECT FOR CARDS === */
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+/* === NEW: RAINBOW TEXT SHIMMER === */
+
+@keyframes rainbowShift {
+  0% { color: #fbbf24; }
+  20% { color: #f97316; }
+  40% { color: #ef4444; }
+  60% { color: #a855f7; }
+  80% { color: #3b82f6; }
+  100% { color: #fbbf24; }
+}
+.animate-rainbow { animation: rainbowShift 2s ease-in-out infinite; }
+
+/* === NEW: BOSS PULSE RING === */
+
+@keyframes bossPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.7), 0 0 20px 5px rgba(239,68,68,0.3); }
+  50% { box-shadow: 0 0 0 8px rgba(239,68,68,0), 0 0 30px 10px rgba(239,68,68,0.5); }
+}
+.animate-bossPulse { animation: bossPulse 2s ease-in-out infinite; }
+
+/* === UTILITY CLASSES === */
+
+.font-game { font-family: 'Fredoka One', cursive; }
+
+/* Star pattern background for home screen */
+.bg-stars {
+  background-image:
+    radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(2px 2px at 40% 70%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 20%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(2px 2px at 80% 50%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 10% 80%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 90%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(2px 2px at 50% 10%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 50%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 15%, rgba(255,255,255,0.35) 0%, transparent 100%),
+    radial-gradient(2px 2px at 15% 55%, rgba(255,255,255,0.15) 0%, transparent 100%);
+}
+
+/* Grid pattern overlay for battle screen depth */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}

@@ -6,9 +6,10 @@ interface MonsterSpriteProps {
   monster: Monster;
   isHit: boolean;
   isDefeated: boolean;
+  isLunging?: boolean;
 }
 
-export function MonsterSprite({ monster, isHit, isDefeated }: MonsterSpriteProps) {
+export function MonsterSprite({ monster, isHit, isDefeated, isLunging = false }: MonsterSpriteProps) {
   const [shake, setShake] = useState(false);
 
   useEffect(() => {
@@ -32,7 +33,7 @@ export function MonsterSprite({ monster, isHit, isDefeated }: MonsterSpriteProps
           ${sizeClass} ${glowClass}
           flex items-center justify-center rounded-3xl ${monster.color} border-2 border-white/20
           transition-all duration-300
-          ${shake ? 'animate-shake' : 'animate-float'}
+          ${isLunging ? 'animate-monsterLunge' : shake ? 'animate-shake' : 'animate-float'}
           ${isDefeated ? 'scale-0 opacity-0' : 'scale-100 opacity-100'}
         `}
       >

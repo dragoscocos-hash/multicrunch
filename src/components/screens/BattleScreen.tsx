@@ -5,6 +5,7 @@ import { ProblemDisplay } from '../battle/ProblemDisplay';
 import { AnswerChoices } from '../battle/AnswerChoices';
 import { TypedAnswer } from '../battle/TypedAnswer';
 import { HeartsBar } from '../battle/HeartsBar';
+import { BattleEffects } from '../battle/BattleEffects';
 import { Button } from '../ui/Button';
 
 export function BattleScreen() {
@@ -15,6 +16,19 @@ export function BattleScreen() {
   const [defeated, setDefeated] = useState(false);
 
   useEffect(() => {
+    if (b.phase === 'player_attacking') {
+      setMonsterHit(true);
+      const t = setTimeout(() => {
+        dispatch({ type: 'ADVANCE_AFTER_FEEDBACK' });
+      }, 700);
+      return () => clearTimeout(t);
+    }
+    if (b.phase === 'monster_attacking') {
+      const t = setTimeout(() => {
+        dispatch({ type: 'ADVANCE_AFTER_FEEDBACK' });
+      }, 700);
+      return () => clearTimeout(t);
+    }
     if (b.phase === 'correct_feedback') {
       setMonsterHit(true);
       const t = setTimeout(() => {
@@ -82,13 +96,14 @@ export function BattleScreen() {
   const feedbackColor = b.lastAnswerCorrect === true ? 'text-green-400' : 'text-red-400';
 
   return (
-    <div className={`min-h-screen bg-gradient-to-b ${b.dungeon.theme.bg} flex flex-col p-4 gap-4`}>
+    <div className={`min-h-screen bg-gradient-to-b ${b.dungeon.theme.bg} flex flex-col p-4 gap-4 relative overflow-hidden ${b.phase === 'monster_attacking' ? 'animate-screenShake' : ''}`}>
+      <BattleEffects phase={b.phase} monsterEmoji={monster.emoji} />
       <div className="flex items-center justify-between pt-2">
         <div>
           <div className={`font-bold text-sm ${b.dungeon.theme.accent}`}>{b.dungeon.theme.icon} {b.dungeon.name}</div>
           <div className="text-white/50 text-xs">Monster {progress}/{totalMonsters}</div>
         </div>
-        <HeartsBar hearts={b.playerHearts} />
+        <HeartsBar hearts={b.playerHearts} isPulsing={b.phase === 'monster_attacking'} />
       </div>
 
       <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
@@ -99,7 +114,7 @@ export function BattleScreen() {
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center gap-4 min-h-0">
-        <MonsterSprite monster={monster} isHit={monsterHit} isDefeated={defeated} />
+        <MonsterSprite monster={monster} isHit={monsterHit} isDefeated={defeated} isLunging={b.phase === 'monster_attacking'} />
 
         {feedbackEmoji && (
           <div className={`text-2xl font-black ${feedbackColor} animate-popIn`}>{feedbackEmoji}</div>

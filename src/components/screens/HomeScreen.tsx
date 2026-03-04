@@ -1,5 +1,6 @@
 import { useGame } from '../../state/gameState';
 import { DUNGEONS } from '../../game/dungeons';
+import { SettingsPanel } from '../ui/SettingsPanel';
 
 function StarDisplay({ count }: { count: number }) {
   return (
@@ -31,6 +32,8 @@ export function HomeScreen() {
           <div className="text-white/50 text-sm">{player.xp} XP</div>
         </div>
       </div>
+
+      <SettingsPanel />
 
       <div className="flex flex-col gap-3">
         <div className="text-white/60 text-sm font-bold uppercase tracking-wider">Choose Dungeon</div>

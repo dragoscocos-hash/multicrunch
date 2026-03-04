@@ -39,10 +39,7 @@ export function BattleScreen() {
       return () => clearTimeout(t);
     }
     if (b.phase === 'wrong_feedback') {
-      const t = setTimeout(() => {
-        dispatch({ type: 'ADVANCE_AFTER_FEEDBACK' });
-      }, 1200);
-      return () => clearTimeout(t);
+      // No auto-advance — kid must press "Next" to continue
     }
     if (b.phase === 'monster_defeated') {
       setMonsterHit(true);
@@ -138,7 +135,26 @@ export function BattleScreen() {
           <div className="bg-black/30 rounded-3xl p-5 border border-white/10">
             <ProblemDisplay problem={b.currentProblem} />
           </div>
-          {b.answerMode === 'typed' ? (
+          {b.phase === 'wrong_feedback' ? (
+            <div className="flex flex-col items-center gap-4 animate-slideUp">
+              {b.answerMode === 'typed' ? (
+                <div className="text-green-400 font-black text-3xl animate-correctFlash rounded-xl px-6 py-2">
+                  {b.currentProblem.answer}
+                </div>
+              ) : (
+                <AnswerChoices
+                  choices={b.choices}
+                  onAnswer={() => {}}
+                  disabled={true}
+                  lastAnswerCorrect={b.lastAnswerCorrect}
+                  lastAnswerValue={b.currentProblem.answer}
+                />
+              )}
+              <Button onClick={() => dispatch({ type: 'ADVANCE_AFTER_FEEDBACK' })} size="lg">
+                {'\u27A1\uFE0F'} Next
+              </Button>
+            </div>
+          ) : b.answerMode === 'typed' ? (
             <TypedAnswer
               onAnswer={(value) => dispatch({ type: 'ANSWER', choiceValue: value })}
               disabled={isAnsweringDisabled}

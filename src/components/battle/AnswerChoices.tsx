@@ -26,7 +26,7 @@ export function AnswerChoices({ choices, onAnswer, disabled, lastAnswerCorrect }
       return `${base} bg-gradient-to-br from-red-400 to-rose-500 border-red-300 text-white animate-shake`;
     }
     if (disabled && choice.isCorrect && lastAnswerCorrect === false) {
-      return `${base} bg-gradient-to-br from-green-400/40 to-emerald-400/40 border-green-400 text-white`;
+      return `${base} bg-gradient-to-br from-green-400 to-emerald-500 border-green-300 text-white animate-correctFlash`;
     }
     return `${base} bg-gradient-to-br from-indigo-500/30 to-purple-500/30 border-indigo-300/40 text-white hover:from-indigo-500/50 hover:to-purple-500/50 hover:border-indigo-300/60`;
   }

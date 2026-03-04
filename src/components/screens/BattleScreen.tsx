@@ -3,6 +3,7 @@ import { useGame } from '../../state/gameState';
 import { MonsterSprite } from '../battle/MonsterSprite';
 import { ProblemDisplay } from '../battle/ProblemDisplay';
 import { AnswerChoices } from '../battle/AnswerChoices';
+import { TypedAnswer } from '../battle/TypedAnswer';
 import { HeartsBar } from '../battle/HeartsBar';
 import { Button } from '../ui/Button';
 
@@ -119,13 +120,22 @@ export function BattleScreen() {
           <div className="bg-black/30 rounded-3xl p-5 border border-white/10">
             <ProblemDisplay problem={b.currentProblem} />
           </div>
-          <AnswerChoices
-            choices={b.choices}
-            onAnswer={(value) => dispatch({ type: 'ANSWER', choiceValue: value })}
-            disabled={isAnsweringDisabled}
-            lastAnswerCorrect={b.lastAnswerCorrect}
-            lastAnswerValue={b.currentProblem.answer}
-          />
+          {b.answerMode === 'typed' ? (
+            <TypedAnswer
+              onAnswer={(value) => dispatch({ type: 'ANSWER', choiceValue: value })}
+              disabled={isAnsweringDisabled}
+              lastAnswerCorrect={b.lastAnswerCorrect}
+              correctAnswer={b.currentProblem.answer}
+            />
+          ) : (
+            <AnswerChoices
+              choices={b.choices}
+              onAnswer={(value) => dispatch({ type: 'ANSWER', choiceValue: value })}
+              disabled={isAnsweringDisabled}
+              lastAnswerCorrect={b.lastAnswerCorrect}
+              lastAnswerValue={b.currentProblem.answer}
+            />
+          )}
         </div>
       )}
     </div>

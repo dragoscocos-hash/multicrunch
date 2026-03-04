@@ -110,10 +110,14 @@ function reducer(state: AppState, action: Action): AppState {
 
       if (isCorrect) {
         const newBossHits = monster.isBoss ? b.bossHitsLanded + 1 : b.bossHitsLanded;
+        const updatedMonsters = b.monsters.map((m, i) =>
+          i === b.currentMonsterIndex ? { ...m, currentHP: m.currentHP - 1 } : m
+        );
         return {
           ...state,
           battle: {
             ...b,
+            monsters: updatedMonsters,
             correctCount: b.correctCount + 1,
             bossHitsLanded: newBossHits,
             lastAnswerCorrect: true,

@@ -1,6 +1,7 @@
 import { useGame } from '../../state/gameState';
 import { DUNGEONS } from '../../game/dungeons';
 import { SettingsPanel } from '../ui/SettingsPanel';
+import { Decorations } from '../ui/Decorations';
 
 function StarDisplay({ count }: { count: number }) {
   return (
@@ -17,26 +18,27 @@ export function HomeScreen() {
   const { player } = state;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-950 via-purple-950 to-indigo-950 flex flex-col p-4 gap-4">
-      <div className="text-center pt-4 pb-2">
+    <div className="min-h-screen bg-gradient-to-b from-sky-200 via-purple-200 to-pink-200 flex flex-col p-4 gap-4 relative overflow-hidden">
+      <Decorations scene="home" />
+      <div className="text-center pt-4 pb-2 relative z-20">
         <h1 className="text-5xl font-black text-yellow-400 drop-shadow-[0_0_20px_rgba(250,204,21,0.5)]">
           {'\uD83E\uDDEE'} MultiCrunch
         </h1>
-        <p className="text-purple-300 text-sm mt-1">Math Monsters await!</p>
+        <p className="text-purple-600 text-sm mt-1">Math Monsters await!</p>
       </div>
 
-      <div className="bg-white/5 rounded-2xl p-3 border border-white/10 flex items-center gap-3">
+      <div className="bg-white/40 backdrop-blur rounded-2xl p-3 border border-white/50 flex items-center gap-3 relative z-20">
         <div className="text-3xl">{'\uD83E\uDDD9'}</div>
         <div>
-          <div className="text-white font-bold">Level {player.level}</div>
-          <div className="text-white/50 text-sm">{player.xp} XP</div>
+          <div className="text-gray-800 font-bold">Level {player.level}</div>
+          <div className="text-gray-500 text-sm">{player.xp} XP</div>
         </div>
       </div>
 
       <SettingsPanel />
 
-      <div className="flex flex-col gap-3">
-        <div className="text-white/60 text-sm font-bold uppercase tracking-wider">Choose Dungeon</div>
+      <div className="flex flex-col gap-3 relative z-20">
+        <div className="text-gray-600 text-sm font-bold uppercase tracking-wider">Choose Dungeon</div>
         {DUNGEONS.map((dungeon) => {
           const prog = player.dungeonProgress[dungeon.id];
           const unlocked = prog?.unlocked ?? false;
@@ -51,17 +53,17 @@ export function HomeScreen() {
               className={`
                 w-full text-left rounded-2xl p-4 border-2 transition-all active:scale-98
                 ${unlocked
-                  ? `bg-gradient-to-r ${dungeon.theme.bg} border-white/20 hover:border-white/40`
-                  : 'bg-white/5 border-white/10 opacity-50'}
+                  ? `bg-gradient-to-r ${dungeon.theme.bg} border-white/40 hover:border-white/60 shadow-lg`
+                  : 'bg-black/10 border-white/20 opacity-50'}
               `}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <span className="text-3xl">{dungeon.theme.icon}</span>
                   <div>
-                    <div className="text-white font-bold">{dungeon.name}</div>
+                    <div className="text-gray-900 font-bold">{dungeon.name}</div>
                     <div className={`text-sm ${dungeon.theme.accent}`}>{dungeon.description}</div>
-                    <div className="text-white/40 text-xs mt-0.5">{monsterCount} monsters {'\u2022'} {'\u2694\uFE0F'.repeat(dungeon.difficulty)}</div>
+                    <div className="text-gray-600 text-xs mt-0.5">{monsterCount} monsters {'\u2022'} {'\u2694\uFE0F'.repeat(dungeon.difficulty)}</div>
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-1">

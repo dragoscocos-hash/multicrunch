@@ -7,6 +7,7 @@ import { TypedAnswer } from '../battle/TypedAnswer';
 import { HeartsBar } from '../battle/HeartsBar';
 import { BattleEffects } from '../battle/BattleEffects';
 import { Button } from '../ui/Button';
+import { Decorations } from '../ui/Decorations';
 
 export function BattleScreen() {
   const { state, dispatch } = useGame();
@@ -59,7 +60,8 @@ export function BattleScreen() {
 
   if (b.phase === 'boss_intro') {
     return (
-      <div className={`min-h-screen bg-gradient-to-b ${b.dungeon.theme.bg} flex flex-col items-center justify-center gap-8 p-6`}>
+      <div className={`min-h-screen bg-gradient-to-b ${b.dungeon.theme.bg} flex flex-col items-center justify-center gap-8 p-6 relative overflow-hidden`}>
+        <Decorations scene="battle" />
         <div className="text-red-400 text-2xl font-black tracking-widest animate-pulse">{'\u26A0'} WARNING {'\u26A0'}</div>
         <div className="text-8xl animate-float">{monster.emoji}</div>
         <div className="text-center">
@@ -97,6 +99,7 @@ export function BattleScreen() {
 
   return (
     <div className={`min-h-screen bg-gradient-to-b ${b.dungeon.theme.bg} flex flex-col p-4 gap-4 relative overflow-hidden ${b.phase === 'monster_attacking' ? 'animate-screenShake' : ''}`}>
+      <Decorations scene="battle" />
       <BattleEffects phase={b.phase} monsterEmoji={monster.emoji} />
       <div className="flex items-center justify-between pt-2">
         <div>

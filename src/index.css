@@ -5,7 +5,7 @@
 * { box-sizing: border-box; }
 body {
   margin: 0;
-  background: #1a0a2e;
+  background: linear-gradient(135deg, #e0f2fe, #f0e6ff, #fce7f3);
   font-family: 'Segoe UI', system-ui, sans-serif;
   overflow: hidden;
 }
@@ -83,6 +83,33 @@ body {
   0%, 100% { transform: scale(1); filter: brightness(1); }
   50% { transform: scale(1.3); filter: brightness(1.5) hue-rotate(-20deg); }
 }
+
+@keyframes drift {
+  0% { transform: translateX(0) translateY(0); }
+  25% { transform: translateX(15px) translateY(-8px); }
+  50% { transform: translateX(-10px) translateY(5px); }
+  75% { transform: translateX(20px) translateY(-3px); }
+  100% { transform: translateX(0) translateY(0); }
+}
+@keyframes flutter {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(8deg) scale(1.05); }
+  50% { transform: rotate(-5deg) scale(0.95); }
+  75% { transform: rotate(6deg) scale(1.02); }
+}
+@keyframes sway {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(8deg); }
+}
+@keyframes sparkle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.animate-drift { animation: drift 8s ease-in-out infinite; }
+.animate-flutter { animation: flutter 3s ease-in-out infinite; }
+.animate-sway { animation: sway 4s ease-in-out infinite; }
+.animate-sparkle { animation: sparkle 2s ease-in-out infinite; }
 
 .animate-swordFly { animation: swordFly 0.5s ease-out forwards; }
 .animate-impactFlash { animation: impactFlash 0.35s ease-out forwards; }
